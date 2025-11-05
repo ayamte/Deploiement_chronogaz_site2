@@ -104,7 +104,7 @@ jobs:
         with:
           project: 'ChronoGaz'
           path: './client ./api' 
-          format: 'ALL'
+          format: 'JSON,HTML'
           out: 'dependency-check-reports'
           args: >-
             --enableRetired
