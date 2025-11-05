@@ -98,19 +98,20 @@ jobs:
           fi
         continue-on-error: true
 
-      - name: SCA - OWASP Dependency Check
-        uses: dependency-check/Dependency-Check_Action@main
-        timeout-minutes: 45
-        with:
-          project: 'ChronoGaz'
-          path: './client ./api' 
-          format: 'HTML,JSON'
-          out: 'dependency-check-reports'
-          args: >-
-            --enableRetired
-            --prettyPrint
-            --nodeAuditSkipDevDependencies
-            --disableNodeAudit
+      - name: SCA - OWASP Dependency Check  
+        uses: dependency-check/Dependency-Check_Action@main  
+        timeout-minutes: 45  
+        with:  
+          project: 'ChronoGaz'  
+          path: './client ./api'  
+          out: 'dependency-check-reports'  
+          args: >-  
+            --format HTML  
+            --format JSON  
+            --enableRetired  
+            --prettyPrint  
+            --nodeAuditSkipDevDependencies  
+            --disableNodeAudit  
         continue-on-error: true
 
       - name: Upload SCA Reports
