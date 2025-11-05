@@ -1,0 +1,504 @@
+{
+  "scan_metadata": {
+    "scan_type": "SAST",
+    "tool": "ESLint Security + No-Secrets",
+    "scan_date": "2025-11-05T23:14:18.848857",
+    "project": "ChronoGaz",
+    "parser_version": "1.0.0"
+  },
+  "summary": {
+    "total_files_scanned": 221,
+    "files_with_issues": 31,
+    "total_vulnerabilities": 84,
+    "risk_score": 0.0,
+    "severity_distribution": {
+      "warning": 95,
+      "error": 1
+    },
+    "component_distribution": {
+      "client": 53,
+      "api": 43
+    }
+  },
+  "top_vulnerabilities": [
+    {
+      "id": "SAST-B2F7C5BC",
+      "source": "SAST",
+      "tool": "ESLint-Security",
+      "component": "api",
+      "rule_id": "no-secrets/no-secrets",
+      "type": "Hardcoded Secrets",
+      "severity": "warning",
+      "risk_level": "critical",
+      "message": "Found a string with entropy 4.15 : \"mongodb://root:chronogaz123@localhost:27017/chronogaz_db?authSource=admin\"",
+      "description": "Hardcoded secrets detected in source code. This can lead to unauthorized access if the code is exposed. | Original: Found a string with entropy 4.15 : \"mongodb://root:chronogaz123@localhost:27017/chronogaz_db?authSource=admin\"",
+      "location": {
+        "file": "/home/runner/work/Deploiement_chronogaz_site4/Deploiement_chronogaz_site4/api/src/__tests__/auth.test.js",
+        "line": 11,
+        "column": 57,
+        "end_line": 11,
+        "end_column": 132
+      },
+      "cwe": "CWE-798",
+      "recommendation": "Remove all hardcoded secrets from source code immediately.",
+      "owasp_category": "A07:2021 - Identification and Authentication Failures",
+      "nist_csf_function": "PR.AC - Access Control"
+    },
+    {
+      "id": "SAST-6705AB04",
+      "source": "SAST",
+      "tool": "ESLint-Security",
+      "component": "api",
+      "rule_id": "no-secrets/no-secrets",
+      "type": "Hardcoded Secrets",
+      "severity": "warning",
+      "risk_level": "critical",
+      "message": "Found a string with entropy 4.15 : \"mongodb://root:chronogaz123@localhost:27017/chronogaz_db?authSource=admin\"",
+      "description": "Hardcoded secrets detected in source code. This can lead to unauthorized access if the code is exposed. | Original: Found a string with entropy 4.15 : \"mongodb://root:chronogaz123@localhost:27017/chronogaz_db?authSource=admin\"",
+      "location": {
+        "file": "/home/runner/work/Deploiement_chronogaz_site4/Deploiement_chronogaz_site4/api/src/__tests__/health.test.js",
+        "line": 11,
+        "column": 57,
+        "end_line": 11,
+        "end_column": 132
+      },
+      "cwe": "CWE-798",
+      "recommendation": "Remove all hardcoded secrets from source code immediately.",
+      "owasp_category": "A07:2021 - Identification and Authentication Failures",
+      "nist_csf_function": "PR.AC - Access Control"
+    },
+    {
+      "id": "SAST-E9285C97",
+      "source": "SAST",
+      "tool": "ESLint-Security",
+      "component": "api",
+      "rule_id": "no-secrets/no-secrets",
+      "type": "Hardcoded Secrets",
+      "severity": "warning",
+      "risk_level": "critical",
+      "message": "Found a string with entropy 5.95 : \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\"",
+      "description": "Hardcoded secrets detected in source code. This can lead to unauthorized access if the code is exposed. | Original: Found a string with entropy 5.95 : \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\"",
+      "location": {
+        "file": "/home/runner/work/Deploiement_chronogaz_site4/Deploiement_chronogaz_site4/api/src/app.js",
+        "line": 758,
+        "column": 21,
+        "end_line": 758,
+        "end_column": 85
+      },
+      "cwe": "CWE-798",
+      "recommendation": "Remove all hardcoded secrets from source code immediately.",
+      "owasp_category": "A07:2021 - Identification and Authentication Failures",
+      "nist_csf_function": "PR.AC - Access Control"
+    },
+    {
+      "id": "SAST-A24E064B",
+      "source": "SAST",
+      "tool": "ESLint-Security",
+      "component": "api",
+      "rule_id": "no-secrets/no-secrets",
+      "type": "Hardcoded Secrets",
+      "severity": "warning",
+      "risk_level": "critical",
+      "message": "Found a string with entropy 5.95 : \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\"",
+      "description": "Hardcoded secrets detected in source code. This can lead to unauthorized access if the code is exposed. | Original: Found a string with entropy 5.95 : \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\"",
+      "location": {
+        "file": "/home/runner/work/Deploiement_chronogaz_site4/Deploiement_chronogaz_site4/api/src/app.js",
+        "line": 919,
+        "column": 21,
+        "end_line": 919,
+        "end_column": 85
+      },
+      "cwe": "CWE-798",
+      "recommendation": "Remove all hardcoded secrets from source code immediately.",
+      "owasp_category": "A07:2021 - Identification and Authentication Failures",
+      "nist_csf_function": "PR.AC - Access Control"
+    },
+    {
+      "id": "SAST-DF4C8953",
+      "source": "SAST",
+      "tool": "ESLint-Security",
+      "component": "api",
+      "rule_id": "security/detect-object-injection",
+      "type": "Object Injection",
+      "severity": "warning",
+      "risk_level": "critical",
+      "message": "Generic Object Injection Sink",
+      "description": "Generic object injection can allow attackers to access or modify object properties. | Original: Generic Object Injection Sink",
+      "location": {
+        "file": "/home/runner/work/Deploiement_chronogaz_site4/Deploiement_chronogaz_site4/api/src/app.js",
+        "line": 1220,
+        "column": 40,
+        "end_line": 1220,
+        "end_column": 59
+      },
+      "cwe": "CWE-94",
+      "recommendation": "Validate and sanitize all object keys before using bracket notation.",
+      "owasp_category": "A03:2021 - Injection",
+      "nist_csf_function": "PR.DS - Data Security"
+    },
+    {
+      "id": "SAST-48DBFE0C",
+      "source": "SAST",
+      "tool": "ESLint-Security",
+      "component": "api",
+      "rule_id": "no-secrets/no-secrets",
+      "type": "Hardcoded Secrets",
+      "severity": "warning",
+      "risk_level": "critical",
+      "message": "Found a string with entropy 4.02 : \"sk-1234567890abcdef\"",
+      "description": "Hardcoded secrets detected in source code. This can lead to unauthorized access if the code is exposed. | Original: Found a string with entropy 4.02 : \"sk-1234567890abcdef\"",
+      "location": {
+        "file": "/home/runner/work/Deploiement_chronogaz_site4/Deploiement_chronogaz_site4/api/src/config/vulnerable-secrets.js",
+        "line": 7,
+        "column": 27,
+        "end_line": 7,
+        "end_column": 48
+      },
+      "cwe": "CWE-798",
+      "recommendation": "Remove all hardcoded secrets from source code immediately.",
+      "owasp_category": "A07:2021 - Identification and Authentication Failures",
+      "nist_csf_function": "PR.AC - Access Control"
+    },
+    {
+      "id": "SAST-26372D55",
+      "source": "SAST",
+      "tool": "ESLint-Security",
+      "component": "api",
+      "rule_id": "no-secrets/no-secrets",
+      "type": "Hardcoded Secrets",
+      "severity": "warning",
+      "risk_level": "critical",
+      "message": "Found a string that matches \"AWS API Key\" : \"AKIAIOSFODNN7EXAMPLE\"",
+      "description": "Hardcoded secrets detected in source code. This can lead to unauthorized access if the code is exposed. | Original: Found a string that matches \"AWS API Key\" : \"AKIAIOSFODNN7EXAMPLE\"",
+      "location": {
+        "file": "/home/runner/work/Deploiement_chronogaz_site4/Deploiement_chronogaz_site4/api/src/config/vulnerable-secrets.js",
+        "line": 8,
+        "column": 24,
+        "end_line": 8,
+        "end_column": 46
+      },
+      "cwe": "CWE-798",
+      "recommendation": "Remove all hardcoded secrets from source code immediately.",
+      "owasp_category": "A07:2021 - Identification and Authentication Failures",
+      "nist_csf_function": "PR.AC - Access Control"
+    },
+    {
+      "id": "SAST-D3FDB8E3",
+      "source": "SAST",
+      "tool": "ESLint-Security",
+      "component": "api",
+      "rule_id": "security/detect-eval-with-expression",
+      "type": "Code Injection",
+      "severity": "error",
+      "risk_level": "critical",
+      "message": "eval with argument of type Identifier",
+      "description": "Use of eval() with expressions can lead to arbitrary code execution. | Original: eval with argument of type Identifier",
+      "location": {
+        "file": "/home/runner/work/Deploiement_chronogaz_site4/Deploiement_chronogaz_site4/api/src/config/vulnerable-secrets.js",
+        "line": 21,
+        "column": 10,
+        "end_line": 21,
+        "end_column": 20
+      },
+      "cwe": "CWE-95",
+      "recommendation": "Avoid using eval(). Use safer alternatives like JSON.parse() or Function constructor with proper validation.",
+      "owasp_category": "A03:2021 - Injection",
+      "nist_csf_function": "PR.IP - Protective Technology"
+    },
+    {
+      "id": "SAST-28FDB19A",
+      "source": "SAST",
+      "tool": "ESLint-Security",
+      "component": "api",
+      "rule_id": "security/detect-object-injection",
+      "type": "Object Injection",
+      "severity": "warning",
+      "risk_level": "critical",
+      "message": "Generic Object Injection Sink",
+      "description": "Generic object injection can allow attackers to access or modify object properties. | Original: Generic Object Injection Sink",
+      "location": {
+        "file": "/home/runner/work/Deploiement_chronogaz_site4/Deploiement_chronogaz_site4/api/src/controllers/adminController.js",
+        "line": 472,
+        "column": 13,
+        "end_line": 472,
+        "end_column": 27
+      },
+      "cwe": "CWE-94",
+      "recommendation": "Validate and sanitize all object keys before using bracket notation.",
+      "owasp_category": "A03:2021 - Injection",
+      "nist_csf_function": "PR.DS - Data Security"
+    },
+    {
+      "id": "SAST-F49FD670",
+      "source": "SAST",
+      "tool": "ESLint-Security",
+      "component": "api",
+      "rule_id": "security/detect-object-injection",
+      "type": "Object Injection",
+      "severity": "warning",
+      "risk_level": "critical",
+      "message": "Generic Object Injection Sink",
+      "description": "Generic object injection can allow attackers to access or modify object properties. | Original: Generic Object Injection Sink",
+      "location": {
+        "file": "/home/runner/work/Deploiement_chronogaz_site4/Deploiement_chronogaz_site4/api/src/controllers/adminController.js",
+        "line": 473,
+        "column": 11,
+        "end_line": 473,
+        "end_column": 47
+      },
+      "cwe": "CWE-94",
+      "recommendation": "Validate and sanitize all object keys before using bracket notation.",
+      "owasp_category": "A03:2021 - Injection",
+      "nist_csf_function": "PR.DS - Data Security"
+    },
+    {
+      "id": "SAST-3E5EF04A",
+      "source": "SAST",
+      "tool": "ESLint-Security",
+      "component": "api",
+      "rule_id": "security/detect-object-injection",
+      "type": "Object Injection",
+      "severity": "warning",
+      "risk_level": "critical",
+      "message": "Generic Object Injection Sink",
+      "description": "Generic object injection can allow attackers to access or modify object properties. | Original: Generic Object Injection Sink",
+      "location": {
+        "file": "/home/runner/work/Deploiement_chronogaz_site4/Deploiement_chronogaz_site4/api/src/controllers/adminController.js",
+        "line": 569,
+        "column": 13,
+        "end_line": 569,
+        "end_column": 27
+      },
+      "cwe": "CWE-94",
+      "recommendation": "Validate and sanitize all object keys before using bracket notation.",
+      "owasp_category": "A03:2021 - Injection",
+      "nist_csf_function": "PR.DS - Data Security"
+    },
+    {
+      "id": "SAST-F1B3E2D5",
+      "source": "SAST",
+      "tool": "ESLint-Security",
+      "component": "api",
+      "rule_id": "security/detect-object-injection",
+      "type": "Object Injection",
+      "severity": "warning",
+      "risk_level": "critical",
+      "message": "Generic Object Injection Sink",
+      "description": "Generic object injection can allow attackers to access or modify object properties. | Original: Generic Object Injection Sink",
+      "location": {
+        "file": "/home/runner/work/Deploiement_chronogaz_site4/Deploiement_chronogaz_site4/api/src/controllers/adminController.js",
+        "line": 570,
+        "column": 11,
+        "end_line": 570,
+        "end_column": 47
+      },
+      "cwe": "CWE-94",
+      "recommendation": "Validate and sanitize all object keys before using bracket notation.",
+      "owasp_category": "A03:2021 - Injection",
+      "nist_csf_function": "PR.DS - Data Security"
+    },
+    {
+      "id": "SAST-64652103",
+      "source": "SAST",
+      "tool": "ESLint-Security",
+      "component": "api",
+      "rule_id": "security/detect-object-injection",
+      "type": "Object Injection",
+      "severity": "warning",
+      "risk_level": "critical",
+      "message": "Generic Object Injection Sink",
+      "description": "Generic object injection can allow attackers to access or modify object properties. | Original: Generic Object Injection Sink",
+      "location": {
+        "file": "/home/runner/work/Deploiement_chronogaz_site4/Deploiement_chronogaz_site4/api/src/controllers/orderController.js",
+        "line": 61,
+        "column": 11,
+        "end_line": 61,
+        "end_column": 40
+      },
+      "cwe": "CWE-94",
+      "recommendation": "Validate and sanitize all object keys before using bracket notation.",
+      "owasp_category": "A03:2021 - Injection",
+      "nist_csf_function": "PR.DS - Data Security"
+    },
+    {
+      "id": "SAST-5B759EC5",
+      "source": "SAST",
+      "tool": "ESLint-Security",
+      "component": "api",
+      "rule_id": "security/detect-object-injection",
+      "type": "Object Injection",
+      "severity": "warning",
+      "risk_level": "critical",
+      "message": "Function Call Object Injection Sink",
+      "description": "Generic object injection can allow attackers to access or modify object properties. | Original: Function Call Object Injection Sink",
+      "location": {
+        "file": "/home/runner/work/Deploiement_chronogaz_site4/Deploiement_chronogaz_site4/api/src/controllers/orderController.js",
+        "line": 62,
+        "column": 27,
+        "end_line": 62,
+        "end_column": 56
+      },
+      "cwe": "CWE-94",
+      "recommendation": "Validate and sanitize all object keys before using bracket notation.",
+      "owasp_category": "A03:2021 - Injection",
+      "nist_csf_function": "PR.DS - Data Security"
+    },
+    {
+      "id": "SAST-BD87E550",
+      "source": "SAST",
+      "tool": "ESLint-Security",
+      "component": "api",
+      "rule_id": "security/detect-object-injection",
+      "type": "Object Injection",
+      "severity": "warning",
+      "risk_level": "critical",
+      "message": "Generic Object Injection Sink",
+      "description": "Generic object injection can allow attackers to access or modify object properties. | Original: Generic Object Injection Sink",
+      "location": {
+        "file": "/home/runner/work/Deploiement_chronogaz_site4/Deploiement_chronogaz_site4/api/src/controllers/orderController.js",
+        "line": 63,
+        "column": 34,
+        "end_line": 63,
+        "end_column": 63
+      },
+      "cwe": "CWE-94",
+      "recommendation": "Validate and sanitize all object keys before using bracket notation.",
+      "owasp_category": "A03:2021 - Injection",
+      "nist_csf_function": "PR.DS - Data Security"
+    },
+    {
+      "id": "SAST-8CF869B5",
+      "source": "SAST",
+      "tool": "ESLint-Security",
+      "component": "api",
+      "rule_id": "security/detect-object-injection",
+      "type": "Object Injection",
+      "severity": "warning",
+      "risk_level": "critical",
+      "message": "Generic Object Injection Sink",
+      "description": "Generic object injection can allow attackers to access or modify object properties. | Original: Generic Object Injection Sink",
+      "location": {
+        "file": "/home/runner/work/Deploiement_chronogaz_site4/Deploiement_chronogaz_site4/api/src/controllers/orderController.js",
+        "line": 65,
+        "column": 27,
+        "end_line": 65,
+        "end_column": 56
+      },
+      "cwe": "CWE-94",
+      "recommendation": "Validate and sanitize all object keys before using bracket notation.",
+      "owasp_category": "A03:2021 - Injection",
+      "nist_csf_function": "PR.DS - Data Security"
+    },
+    {
+      "id": "SAST-9BDFCF2B",
+      "source": "SAST",
+      "tool": "ESLint-Security",
+      "component": "api",
+      "rule_id": "security/detect-object-injection",
+      "type": "Object Injection",
+      "severity": "warning",
+      "risk_level": "critical",
+      "message": "Generic Object Injection Sink",
+      "description": "Generic object injection can allow attackers to access or modify object properties. | Original: Generic Object Injection Sink",
+      "location": {
+        "file": "/home/runner/work/Deploiement_chronogaz_site4/Deploiement_chronogaz_site4/api/src/controllers/orderController.js",
+        "line": 1116,
+        "column": 19,
+        "end_line": 1116,
+        "end_column": 28
+      },
+      "cwe": "CWE-94",
+      "recommendation": "Validate and sanitize all object keys before using bracket notation.",
+      "owasp_category": "A03:2021 - Injection",
+      "nist_csf_function": "PR.DS - Data Security"
+    },
+    {
+      "id": "SAST-EE565305",
+      "source": "SAST",
+      "tool": "ESLint-Security",
+      "component": "api",
+      "rule_id": "security/detect-object-injection",
+      "type": "Object Injection",
+      "severity": "warning",
+      "risk_level": "critical",
+      "message": "Generic Object Injection Sink",
+      "description": "Generic object injection can allow attackers to access or modify object properties. | Original: Generic Object Injection Sink",
+      "location": {
+        "file": "/home/runner/work/Deploiement_chronogaz_site4/Deploiement_chronogaz_site4/api/src/controllers/orderController.js",
+        "line": 1119,
+        "column": 21,
+        "end_line": 1119,
+        "end_column": 30
+      },
+      "cwe": "CWE-94",
+      "recommendation": "Validate and sanitize all object keys before using bracket notation.",
+      "owasp_category": "A03:2021 - Injection",
+      "nist_csf_function": "PR.DS - Data Security"
+    },
+    {
+      "id": "SAST-FA418E3D",
+      "source": "SAST",
+      "tool": "ESLint-Security",
+      "component": "api",
+      "rule_id": "security/detect-object-injection",
+      "type": "Object Injection",
+      "severity": "warning",
+      "risk_level": "critical",
+      "message": "Generic Object Injection Sink",
+      "description": "Generic object injection can allow attackers to access or modify object properties. | Original: Generic Object Injection Sink",
+      "location": {
+        "file": "/home/runner/work/Deploiement_chronogaz_site4/Deploiement_chronogaz_site4/api/src/controllers/orderController.js",
+        "line": 1131,
+        "column": 14,
+        "end_line": 1131,
+        "end_column": 32
+      },
+      "cwe": "CWE-94",
+      "recommendation": "Validate and sanitize all object keys before using bracket notation.",
+      "owasp_category": "A03:2021 - Injection",
+      "nist_csf_function": "PR.DS - Data Security"
+    },
+    {
+      "id": "SAST-D370A9E4",
+      "source": "SAST",
+      "tool": "ESLint-Security",
+      "component": "api",
+      "rule_id": "security/detect-object-injection",
+      "type": "Object Injection",
+      "severity": "warning",
+      "risk_level": "critical",
+      "message": "Generic Object Injection Sink",
+      "description": "Generic object injection can allow attackers to access or modify object properties. | Original: Generic Object Injection Sink",
+      "location": {
+        "file": "/home/runner/work/Deploiement_chronogaz_site4/Deploiement_chronogaz_site4/api/src/controllers/orderController.js",
+        "line": 1132,
+        "column": 11,
+        "end_line": 1132,
+        "end_column": 29
+      },
+      "cwe": "CWE-94",
+      "recommendation": "Validate and sanitize all object keys before using bracket notation.",
+      "owasp_category": "A03:2021 - Injection",
+      "nist_csf_function": "PR.DS - Data Security"
+    }
+  ],
+  "statistics": {
+    "by_type": {
+      "security/detect-object-injection": 83,
+      "no-secrets/no-secrets": 9,
+      "security/detect-eval-with-expression": 1,
+      "security/detect-non-literal-regexp": 3
+    },
+    "by_cwe": {
+      "CWE-94": 83,
+      "CWE-798": 9,
+      "CWE-95": 1,
+      "CWE-400": 3
+    },
+    "by_owasp": {
+      "A03:2021 - Injection": 84,
+      "A07:2021 - Identification and Authentication Failures": 9,
+      "A04:2021 - Insecure Design": 3
+    }
+  }
+}
