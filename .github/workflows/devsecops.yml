@@ -2,7 +2,7 @@ name: DevSecOps Security Analysis
 
 on:
   push:
-    branches: [main, develop, devsecops/vulnerable-testing]
+    branches: [main, develop, devsecops/vulnerable-testing, parsing]
   pull_request:
     branches: [main]
   workflow_dispatch:
