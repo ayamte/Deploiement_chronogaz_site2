@@ -2,27 +2,29 @@ name: DevSecOps Security Analysis
 
 on:
   push:
-    branches: [main, develop, devsecops/vulnerable-testing, parsing]
+    branches: [main, develop, devsecops/vulnerable-testing]
   pull_request:
     branches: [main]
   workflow_dispatch:
 
-#Permissions pour le workflow  
-permissions:  
-  contents: read  
-  actions: write  
-  security-events: write  
-  
+# Permissions pour le workflow
+permissions:
+  contents: read
+  actions: write
+  security-events: write
 
 jobs:
+  # ================================================================
+  # JOB 1 - SECURITY SCAN (SAST + SCA)
+  # ================================================================
   security-scan:
     runs-on: ubuntu-latest
     name: Static Security Analysis (SAST & SCA)
 
-    permissions:  
-      contents: read  
-      actions: write  
-      security-events: write  
+    permissions:
+      contents: read
+      actions: write
+      security-events: write
 
     steps:
       - name: Checkout code
@@ -52,9 +54,9 @@ jobs:
         run: npm ci --legacy-peer-deps
         continue-on-error: false
 
-      # ===================================
-      # SCA - Analyse des Dépendances
-      # ===================================
+      # ======================================================
+      # 🔹 SCA - Analyse des Dépendances
+      # ======================================================
 
       - name: SCA - NPM Audit (Client - Production)
         working-directory: ./client
@@ -100,12 +102,17 @@ jobs:
 
       - name: SCA - OWASP Dependency Check
         uses: dependency-check/Dependency-Check_Action@main
-        timeout-minutes: 30
+        timeout-minutes: 45
         with:
           project: 'ChronoGaz'
-          path: '.'
-          format: 'JSON,HTML'
+          path: './client ./api'
+          format: 'ALL'
           out: 'dependency-check-reports'
+          args: >-
+            --enableRetired
+            --prettyPrint
+            --nodeAuditSkipDevDependencies
+            --disableNodeAudit
         continue-on-error: true
 
       - name: Upload SCA Reports
@@ -122,9 +129,9 @@ jobs:
           retention-days: 30
           if-no-files-found: warn
 
-      # ===================================
-      # SAST - Analyse Statique du Code
-      # ===================================
+      # ======================================================
+      # 🔹 SAST - Analyse Statique du Code
+      # ======================================================
 
       - name: SAST - ESLint Security Plugin
         run: |
@@ -143,7 +150,6 @@ jobs:
           
           cd $GITHUB_WORKSPACE
           
-          # Créer config ESLint avec nom unique
           printf '{"env":{"browser":true,"es2021":true,"node":true},"parserOptions":{"ecmaVersion":2021,"sourceType":"module","ecmaFeatures":{"jsx":true}},"plugins":["security","no-secrets"],"rules":{"no-secrets/no-secrets":"warn","security/detect-eval-with-expression":"error","security/detect-non-literal-require":"warn","security/detect-non-literal-regexp":"warn","security/detect-non-literal-fs-filename":"warn","security/detect-unsafe-regex":"error","security/detect-buffer-noassert":"warn","security/detect-child-process":"warn","security/detect-disable-mustache-escape":"warn","security/detect-no-csrf-before-method-override":"warn","security/detect-possible-timing-attacks":"warn","security/detect-pseudoRandomBytes":"warn","security/detect-object-injection":"warn"}}' > .eslintrc.security.json
           
           echo "📄 Config de sécurité générée"
@@ -151,7 +157,6 @@ jobs:
           echo '[]' > sast-eslint-client.json
           echo '[]' > sast-eslint-api.json
           
-          # Scan client avec --no-eslintrc pour ignorer les configs existantes
           echo "🔍 Scan client/src..."
           if [ -d "client/src" ]; then
             find client/src -type f \( -name "*.js" -o -name "*.jsx" \) > /tmp/client-files.txt
@@ -165,7 +170,6 @@ jobs:
             fi
           fi
           
-          # Scan api avec --no-eslintrc
           echo "🔍 Scan api/src..."
           if [ -d "api/src" ]; then
             find api/src -type f -name "*.js" > /tmp/api-files.txt
@@ -179,10 +183,9 @@ jobs:
             fi
           fi
           
-          # Valider JSON et afficher résumé
           for f in sast-eslint-client.json sast-eslint-api.json; do
             if ! jq empty "$f" 2>/dev/null; then
-              echo "⚠️  JSON invalide pour $f, réinitialisation"
+              echo "⚠️ JSON invalide pour $f, réinitialisation"
               echo '[]' > "$f"
             else
               ISSUES=$(jq 'length' "$f")
@@ -190,12 +193,9 @@ jobs:
             fi
           done
           
-          echo ""
           echo "✅ Rapports SAST générés:"
           ls -lh sast-eslint-*.json
           
-          # Afficher un résumé des problèmes trouvés
-          echo ""
           echo "📊 Résumé des vulnérabilités détectées:"
           for f in sast-eslint-client.json sast-eslint-api.json; do
             if [ -f "$f" ]; then
@@ -218,142 +218,82 @@ jobs:
           retention-days: 30
           if-no-files-found: warn
 
-  # ====================================================================  
-  # Job DAST - Dynamic Application Security Testing  
-  # ====================================================================  
-    
-  dast-scan:    
-    runs-on: ubuntu-latest    
-    name: Dynamic Security Analysis (DAST)    
-    needs: security-scan    
-    timeout-minutes: 20    
-  
-    permissions:    
-      contents: read    
-      actions: write    
-      security-events: write  
-      id-token: write  
-        
-    steps:    
-      - name: Checkout code    
-        uses: actions/checkout@v4    
-          
-      - name: Verify Target Accessibility    
-        run: |    
-          echo "Testing target: ${{ secrets.ZAP_TARGET_URL }}"    
-          if curl -f -s -o /dev/null "${{ secrets.ZAP_TARGET_URL }}/api/health"; then    
-            echo "✅ Target is accessible"    
-          else    
-            echo "⚠️ Warning: Target may not be accessible"    
-          fi    
-        continue-on-error: true    
-          
-      - name: DAST - OWASP ZAP Baseline Scan    
-        uses: zaproxy/action-baseline@v0.10.0    
-        with:    
-          target: ${{ secrets.ZAP_TARGET_URL }}    
-          rules_file_name: '.zap/rules.tsv'    
-          cmd_options: '-a'    
-          allow_issue_writing: false  
-          artifact_name: 'zap-scan-results'
-        continue-on-error: true    
-          
-      - name: Upload DAST Reports    
-        uses: actions/upload-artifact@v4    
-        if: always()    
-        with:    
-          name: dast-reports    
-          path: |    
-            report_html.html    
-            report_json.json    
-            report_md.md    
-          retention-days: 30    
-          if-no-files-found: warn
-
-  # ====================================================================
-  # Job PARSING - Parse SAST Reports
-  # ====================================================================
-  
-  parse-sast-reports:
+  # ================================================================
+  # JOB 2 - DAST (Dynamic Security Analysis)
+  # ================================================================
+  dast-scan:
     runs-on: ubuntu-latest
-    name: Parse SAST Reports
-    needs: [security-scan]
-    if: always()
-    
+    name: Dynamic Security Analysis (DAST)
+    needs: security-scan
+    timeout-minutes: 20
+
+    permissions:
+      contents: read
+      actions: write
+      security-events: write
+      id-token: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      
-      - name: Download SAST Reports
-        uses: actions/download-artifact@v4
-        with:
-          name: sast-reports
-          path: ./reports/
-        continue-on-error: true
-      
-      - name: Run SAST Parser
+
+      - name: Verify Target Accessibility
         run: |
-          echo "🔍 Parsing SAST Reports..."
-          python3 scripts/parsing/sast_parser.py \
-            -i ./reports/ \
-            -o ./unified_sast_report.json
-        continue-on-error: true
-      
-      - name: Display Summary
-        if: always()
-        run: |
-          if [ -f ./unified_sast_report.json ]; then
-            python3 << 'EOF'
-          import json
-          with open('./unified_sast_report.json') as f:
-              data = json.load(f)
-              summary = data['summary']
-              print(f"\n✅ Parsing Complete!")
-              print(f"   Vulnerabilities: {summary['total_vulnerabilities']}")
-              print(f"   Risk Score: {summary['risk_score']}/100")
-          EOF
+          echo "Testing target: ${{ secrets.ZAP_TARGET_URL }}"
+          if curl -f -s -o /dev/null "${{ secrets.ZAP_TARGET_URL }}/api/health"; then
+            echo "✅ Target is accessible"
+          else
+            echo "⚠️ Warning: Target may not be accessible"
           fi
-      
-      - name: Upload Unified Report
+        continue-on-error: true
+
+      - name: DAST - OWASP ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.10.0
+        with:
+          target: ${{ secrets.ZAP_TARGET_URL }}
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-a'
+          allow_issue_writing: false
+          artifact_name: 'zap-scan-results'
+        continue-on-error: true
+
+      - name: Upload DAST Reports
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: unified-sast-report
-          path: unified_sast_report.json
+          name: dast-reports
+          path: |
+            report_html.html
+            report_json.json
+            report_md.md
           retention-days: 30
+          if-no-files-found: warn
 
-
-  # ====================================================================
-  # Job PARSING SCA - Parse SCA Reports
-  # ====================================================================
-  
+  # ================================================================
+  # JOB 3 - PARSING SCA REPORTS
+  # ================================================================
   parse-sca-reports:
     runs-on: ubuntu-latest
     name: Parse SCA Reports
     needs: [security-scan]
     if: always()
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      
+
       - name: Download SCA Reports
         uses: actions/download-artifact@v4
         with:
           name: sca-reports
           path: ./reports/
         continue-on-error: true
-      
+
       - name: Run SCA Parser
         run: |
           echo "🔍 Parsing SCA Reports..."
@@ -361,7 +301,7 @@ jobs:
             -i ./reports/ \
             -o ./unified_sca_report.json
         continue-on-error: true
-      
+
       - name: Display Summary
         if: always()
         run: |
@@ -370,76 +310,18 @@ jobs:
           import json
           with open('./unified_sca_report.json') as f:
               data = json.load(f)
-              summary = data['summary']
+              summary = data.get('summary', {})
               print(f"\n✅ SCA Parsing Complete!")
-              print(f"   Vulnerabilities: {summary['total_vulnerabilities']}")
-              print(f"   Vulnerable Packages: {summary['vulnerable_packages']}")
-              print(f"   Risk Score: {summary['risk_score']}/100")
+              print(f"   Total vulnerabilities: {summary.get('total_vulnerabilities', 0)}")
+              print(f"   Vulnerable packages: {summary.get('vulnerable_packages', 0)}")
+              print(f"   Risk Score: {summary.get('risk_score', 0)}/100\n")
           EOF
           fi
-      
-      - name: Upload Unified Report
+
+      - name: Upload Unified SCA Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: unified-sca-report
           path: unified_sca_report.json
-          retention-days: 30
-
-  # ====================================================================
-  # Job PARSING DAST - Parse DAST Reports
-  # ====================================================================
-  
-  parse-dast-reports:
-    runs-on: ubuntu-latest
-    name: Parse DAST Reports
-    needs: [dast-scan]
-    if: always()
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      
-      - name: Download DAST Reports
-        uses: actions/download-artifact@v4
-        with:
-          name: dast-reports
-          path: ./reports/
-        continue-on-error: true
-      
-      - name: Run DAST Parser
-        run: |
-          echo "🔍 Parsing DAST Reports..."
-          python3 scripts/parsing/dast_parser.py \
-            -i ./reports/ \
-            -o ./unified_dast_report.json
-        continue-on-error: true
-      
-      - name: Display Summary
-        if: always()
-        run: |
-          if [ -f ./unified_dast_report.json ]; then
-            python3 << 'EOF'
-          import json
-          with open('./unified_dast_report.json') as f:
-              data = json.load(f)
-              summary = data['summary']
-              print(f"\n✅ DAST Parsing Complete!")
-              print(f"   Alerts: {summary['total_alerts']}")
-              print(f"   Instances: {summary['total_instances']}")
-              print(f"   Risk Score: {summary['risk_score']}/100")
-          EOF
-          fi
-      
-      - name: Upload Unified Report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: unified-dast-report
-          path: unified_dast_report.json
           retention-days: 30
