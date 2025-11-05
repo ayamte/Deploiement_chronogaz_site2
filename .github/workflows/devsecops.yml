@@ -104,7 +104,7 @@ jobs:
         with:
           project: 'ChronoGaz'
           path: '.'
-          format: 'JSON,HTML'
+          format: 'ALL'
           out: 'dependency-check-reports'
         continue-on-error: true
 
