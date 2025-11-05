@@ -86,7 +86,7 @@ jobs:
         with:  
           project: 'ChronoGaz'  
           path: '.'  
-          format: 'JSON,HTML'  
+          format: 'ALL'  
           out: 'dependency-check-reports'  
       - name: Upload SCA Reports  
         uses: actions/upload-artifact@v4  
