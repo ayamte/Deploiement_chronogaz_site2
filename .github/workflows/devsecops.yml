@@ -325,3 +325,81 @@ jobs:
           name: unified-sca-report
           path: unified_sca_report.json
           retention-days: 30
+
+  # ================================================================
+  # JOB 4 - PARSING SAST REPORTS
+  # ================================================================
+  parse-sast-reports:
+    runs-on: ubuntu-latest
+    name: Parse SAST Reports
+    needs: [security-scan]
+    if: always()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Download SAST Reports
+        uses: actions/download-artifact@v4
+        with:
+          name: sast-reports
+          path: ./reports/
+        continue-on-error: true
+
+      - name: Run SAST Parser
+        run: |
+          echo "🔍 Parsing SAST Reports..."
+          python3 scripts/parsing/sast_parser.py -i ./reports/ -o ./unified_sast_report.json
+        continue-on-error: true
+
+      - name: Upload Unified SAST Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unified-sast-report
+          path: unified_sast_report.json
+          retention-days: 30
+
+  # ================================================================
+  # JOB 5 - PARSING DAST REPORTS
+  # ================================================================
+  parse-dast-reports:
+    runs-on: ubuntu-latest
+    name: Parse DAST Reports
+    needs: [dast-scan]
+    if: always()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Download DAST Reports
+        uses: actions/download-artifact@v4
+        with:
+          name: dast-reports
+          path: ./reports/
+        continue-on-error: true
+
+      - name: Run DAST Parser
+        run: |
+          echo "🔍 Parsing DAST Reports..."
+          python3 scripts/parsing/dast_parser.py -i ./reports/ -o ./unified_dast_report.json
+        continue-on-error: true
+
+      - name: Upload Unified DAST Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unified-dast-report
+          path: unified_dast_report.json
+          retention-days: 30
