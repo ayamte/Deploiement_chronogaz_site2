@@ -500,3 +500,57 @@ jobs:
           path: ./generated-policies/
           retention-days: 30
           if-no-files-found: warn # Use 'warn' so it doesn't fail if no policies are made
+
+  # ================================================================  
+  # JOB 6 - EVALUATE POLICIES (BLEU & ROUGE-L)  
+  # ================================================================  
+  evaluate-policies:  
+    runs-on: ubuntu-latest  
+    name: Evaluate Generated Policies (BLEU & ROUGE-L)  
+    needs: [generate-policies]  
+    if: always()  
+      
+    permissions:  
+      contents: read  
+      actions: write  
+      
+    steps:  
+      - name: Checkout code  
+        uses: actions/checkout@v4  
+        
+      - name: Setup Python  
+        uses: actions/setup-python@v4  
+        with:  
+          python-version: '3.11'  
+        
+      - name: Install Python Dependencies  
+        run: |  
+          pip install nltk rouge-score  
+        
+      - name: Download Generated Policies  
+        uses: actions/download-artifact@v4  
+        with:  
+          name: generated-policies  
+          path: ./generated-policies/  
+        continue-on-error: true  
+        
+      - name: Run Policy Evaluation  
+        run: |  
+          echo "🔍 Evaluating generated policies..."  
+          python3 scripts/llm-integration/policy_evaluator.py \  
+            --deepseek-policies ./generated-policies/deepseek_generated_policies.md \  
+            --llama-policies ./generated-policies/llama_generated_policies.md \  
+            --output-dir ./evaluation-results/  
+            
+          echo "✅ Evaluation complete. Results:"  
+          cat ./evaluation-results/evaluation_report.json  
+        continue-on-error: true  
+        
+      - name: Upload Evaluation Results  
+        uses: actions/upload-artifact@v4  
+        if: always()  
+        with:  
+          name: policy-evaluation-results  
+          path: ./evaluation-results/  
+          retention-days: 30  
+          if-no-files-found: warn
