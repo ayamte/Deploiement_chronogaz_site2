@@ -536,25 +536,25 @@ jobs:
             
       - name: Verify Reference Policies      
         run: |      
-          if [ ! -f ./reference_policies/nist_iso_templates.json ]; then      
-            echo "❌ ERROR: Reference policies file not found!"      
-            echo "Please create reference_policies/nist_iso_templates.json at repository root"      
-            exit 1      
-          fi      
-          echo "✅ Reference policies file found"      
-          ls -lh ./reference_policies/nist_iso_templates.json  
+          if [ ! -f ./reference_policies/nist_iso_templates.json ]; then
+            echo "❌ ERROR: Reference policies file not found!"
+            echo "Please create reference_policies/nist_iso_templates.json at repository root"
+            exit 1
+          fi
+          echo "✅ Reference policies file found"
+          ls -lh ./reference_policies/nist_iso_templates.json
             
       - name: Run Policy Evaluation      
         run: |      
-          echo "🔍 Evaluating generated policies against NIST/ISO references..."      
-          python3 scripts/llm-integration/policy_evaluator.py \  
-            --deepseek-policies ./generated-policies/deepseek_generated_policies.md \  
-            --llama-policies ./generated-policies/llama_generated_policies.md \  
-            --reference-policies ./reference_policies/nist_iso_templates.json \  
-            --output-dir ./evaluation-results/  
+          echo "🔍 Evaluating generated policies against NIST/ISO references..."
+          python3 scripts/llm-integration/policy_evaluator.py \
+            --deepseek-policies ./generated-policies/deepseek_generated_policies.md \
+            --llama-policies ./generated-policies/llama_generated_policies.md \
+            --reference-policies ./reference_policies/nist_iso_templates.json \
+            --output-dir ./evaluation-results/
                 
-          echo "✅ Evaluation complete. Results:"      
-          cat ./evaluation-results/evaluation_report.json      
+          echo "✅ Evaluation complete. Results:"
+          cat ./evaluation-results/evaluation_report.json
         continue-on-error: true     
             
       - name: Upload Evaluation Results      
