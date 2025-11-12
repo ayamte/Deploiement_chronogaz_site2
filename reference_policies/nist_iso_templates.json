@@ -1,0 +1,65 @@
+{  
+  "hardcoded_secrets": {  
+    "policy_statement": "All credentials, API keys, and secrets must be stored in a centralized secrets management system and never hardcoded in source code or configuration files.",  
+    "implementation": "1. Use environment variables or secrets managers (AWS Secrets Manager, HashiCorp Vault, Azure Key Vault)\n2. Implement pre-commit hooks using tools like git-secrets or truffleHog\n3. Conduct regular code reviews with security checklists\n4. Rotate credentials quarterly",  
+    "verification": "1. SAST scanning on every commit using ESLint security plugins\n2. Quarterly security audits of codebase\n3. Automated secrets detection in CI/CD pipeline",  
+    "nist_csf": "PR.DS-5",  
+    "iso_27001": "A.8.2.1"  
+  },  
+  "object_injection": {  
+    "policy_statement": "All user input must be validated and sanitized before being used to access object properties or construct dynamic queries to prevent injection attacks.",  
+    "implementation": "1. Implement strict input validation using allowlists for property names\n2. Use parameterized queries and prepared statements\n3. Apply principle of least privilege for object access\n4. Sanitize all user-controlled data",  
+    "verification": "1. SAST scanning with ESLint security rules\n2. Annual penetration testing focusing on injection vectors\n3. Mandatory security code reviews for all data access logic",  
+    "nist_csf": "PR.DS-5",  
+    "iso_27001": "A.14.2.1"  
+  },  
+  "arbitrary_code_execution": {  
+    "policy_statement": "The use of eval(), Function() constructor, and similar dynamic code execution functions is strictly prohibited unless explicitly approved and sandboxed.",  
+    "implementation": "1. Ban eval() and Function() in coding standards\n2. Use static code analysis to detect dangerous functions\n3. Implement Content Security Policy to prevent inline script execution\n4. Use safer alternatives like JSON.parse() for data parsing",  
+    "verification": "1. SAST scanning on every commit to detect eval() usage\n2. Peer code reviews with explicit checklist for dangerous functions\n3. Quarterly security audits of codebase",  
+    "nist_csf": "PR.DS-5",  
+    "iso_27001": "A.14.2.1"  
+  },  
+  "vulnerable_dependencies": {  
+    "policy_statement": "All third-party dependencies must be regularly scanned for known vulnerabilities and updated to secure versions within defined SLA timeframes based on severity.",  
+    "implementation": "1. Integrate SCA tools (npm audit, OWASP Dependency-Check) into CI/CD\n2. Establish SLA: Critical (24h), High (7 days), Medium (30 days)\n3. Maintain software bill of materials (SBOM)\n4. Use dependency lock files and verify checksums",  
+    "verification": "1. Automated SCA scanning on every build\n2. Monthly dependency audit reports\n3. Quarterly review of SBOM and license compliance",  
+    "nist_csf": "PR.IP-12",  
+    "iso_27001": "A.12.6.1"  
+  },  
+  "csp_directive_missing": {  
+    "policy_statement": "All Content Security Policy implementations must explicitly define all directives without relying on fallback mechanisms to prevent unintended resource loading.",  
+    "implementation": "1. Define mandatory CSP directives: default-src, script-src, object-src, base-uri, frame-ancestors\n2. Use CSP report-only mode for testing before enforcement\n3. Implement automated CSP validation in deployment pipeline\n4. Document CSP policy and review quarterly",  
+    "verification": "1. DAST scanning to detect missing CSP directives\n2. Automated CSP header validation in CI/CD\n3. Manual security reviews during design phase",  
+    "nist_csf": "PR.DS-5",  
+    "iso_27001": "A.14.2.1"  
+  },  
+  "csp_header_not_set": {  
+    "policy_statement": "All web applications must implement a Content Security Policy HTTP header to mitigate XSS and data injection attacks by restricting content sources.",  
+    "implementation": "1. Deploy CSP header on all HTTP responses\n2. Use strict CSP: script-src 'self'; object-src 'none'; base-uri 'self'\n3. Avoid 'unsafe-inline' and 'unsafe-eval' directives\n4. Use nonces or hashes for legitimate inline scripts",  
+    "verification": "1. DAST scanning to verify CSP header presence\n2. Browser developer tools inspection during deployment\n3. Automated security testing in CI/CD",  
+    "nist_csf": "PR.DS-5",  
+    "iso_27001": "A.14.2.1"  
+  },  
+  "cors_misconfiguration": {  
+    "policy_statement": "Cross-Origin Resource Sharing (CORS) policies must be configured to allow only trusted origins and prevent unauthorized cross-domain access.",  
+    "implementation": "1. Use explicit origin allowlists instead of wildcard (*)\n2. Validate Origin header on server-side\n3. Avoid Access-Control-Allow-Credentials with wildcard origins\n4. Document and review CORS policy quarterly",  
+    "verification": "1. DAST scanning to detect overly permissive CORS\n2. Manual testing of cross-origin requests\n3. Security reviews of API endpoints",  
+    "nist_csf": "PR.AC-5",  
+    "iso_27001": "A.13.1.3"  
+  },  
+  "clickjacking": {  
+    "policy_statement": "All web applications must implement anti-clickjacking headers (X-Frame-Options or CSP frame-ancestors) to prevent UI redress attacks.",  
+    "implementation": "1. Set X-Frame-Options: DENY or SAMEORIGIN on all responses\n2. Use CSP frame-ancestors directive as modern alternative\n3. Test framing behavior in different browsers\n4. Document exceptions for legitimate iframe usage",  
+    "verification": "1. DAST scanning to verify anti-clickjacking headers\n2. Manual testing with iframe embedding attempts\n3. Quarterly security header audits",  
+    "nist_csf": "PR.DS-5",  
+    "iso_27001": "A.14.2.1"  
+  },  
+  "permissions_policy": {  
+    "policy_statement": "All web applications should implement a Permissions-Policy header to control browser features and reduce attack surface.",  
+    "implementation": "1. Define Permissions-Policy for sensitive features: geolocation, camera, microphone\n2. Use restrictive defaults: geolocation=(), camera=(), microphone=()\n3. Document business justification for enabled features\n4. Review policy when adding new browser features",  
+    "verification": "1. DAST scanning to detect missing Permissions-Policy\n2. Browser developer tools inspection\n3. Quarterly review of enabled features",  
+    "nist_csf": "PR.DS-5",  
+    "iso_27001": "A.14.2.1"  
+  }  
+}
