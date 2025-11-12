@@ -59,7 +59,7 @@ Applications must prevent generic object injection vulnerabilities by validating
 **Risk Level:** ERROR
 
 **Policy Statement:**
-The use of eval() with expressions that can lead to arbitrary code execution is strictly prohibited. All code must be reviewed and sanitized to prevent this vulnerability.
+The use of eval() with expressions that can lead to arbitrary code execution is strictly prohibited. All code must be reviewed and sanitized to prevent this vulnerability
 
 **Implementation Requirements:**
 1. Prohibit the use of eval() and similar functions in all new code development.
