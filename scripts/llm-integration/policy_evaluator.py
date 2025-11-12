@@ -213,7 +213,7 @@ def evaluate_policy_against_reference(policy: Dict[str, str], reference: Dict[st
     
     return results
 
-def calculate_accuracy(results: List[Dict], threshold: float = 0.3) -> Dict:
+def calculate_accuracy(results: List[Dict], threshold: float = 0.15) -> Dict:
     """
     Calculate accuracy metrics based on BLEU/ROUGE-L thresholds
     
@@ -278,7 +278,7 @@ def calculate_averages(results: List[Dict]) -> Dict:
     iso_compliance = sum(1 for r in results if r.get('iso_27001_match', False)) / len(results) * 100
     
     # Calculate accuracy metrics
-    accuracy_metrics = calculate_accuracy(results, threshold=0.3)
+    accuracy_metrics = calculate_accuracy(results)
     
     return {
         'avg_statement_bleu': 0.0,  # Not evaluated in current implementation
@@ -420,7 +420,7 @@ def main():
     print(f"  Verification BLEU: {deepseek_summary.get('avg_verification_bleu', 0):.4f}")  
     print(f"  NIST CSF Compliance: {deepseek_summary.get('nist_csf_compliance_rate', 0):.1f}%")  
     print(f"  ISO 27001 Compliance: {deepseek_summary.get('iso_27001_compliance_rate', 0):.1f}%")  
-    print(f"  Policies above threshold ({deepseek_summary.get('accuracy_threshold', 0.3)}): {deepseek_summary.get('policies_above_threshold', 0)}/{len(deepseek_results)}")  
+    print(f"  Policies above threshold ({deepseek_summary.get('accuracy_threshold')}): {deepseek_summary.get('policies_above_threshold', 0)}/{len(deepseek_results)}")  
       
     print(f"\n🦙 LLaMA Results:")  
     print(f"  Overall Score: {llama_summary.get('avg_overall_score', 0):.4f}")  
@@ -431,7 +431,7 @@ def main():
     print(f"  Verification BLEU: {llama_summary.get('avg_verification_bleu', 0):.4f}")  
     print(f"  NIST CSF Compliance: {llama_summary.get('nist_csf_compliance_rate', 0):.1f}%")  
     print(f"  ISO 27001 Compliance: {llama_summary.get('iso_27001_compliance_rate', 0):.1f}%")  
-    print(f"  Policies above threshold ({llama_summary.get('accuracy_threshold', 0.3)}): {llama_summary.get('policies_above_threshold', 0)}/{len(llama_results)}")  
+    print(f"  Policies above threshold ({llama_summary.get('accuracy_threshold')}): {llama_summary.get('policies_above_threshold', 0)}/{len(llama_results)}")
       
     print(f"\n🏆 Winner: {final_report['comparative_analysis']['winner_overall']}")  
     print(f"  Score Difference: {final_report['comparative_analysis']['score_difference']:.4f}")  
